@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Arrays;
 class Practice {
@@ -18,7 +19,7 @@ class Practice {
 
         System.out.println("Enter the Target");
         int target=s.nextInt();
-        //finding process
+ /*       //finding process  (Two Sum)
         for(int i=0;i<n;i++){
             int need=target-arr[i];
             if(seen.containsKey(need)){
@@ -29,6 +30,18 @@ class Practice {
         }
         if(!found){
             System.out.println("Not Found");
+        }*/
+        HashSet<Integer> nums = new HashSet<>();
+        for ( int num :nums){
+            if (nums.contains(num)) {
+                System.out.println("True");
+                found=true;
+                break;
+            }
+            nums.add(num);
         }
+        if(!found)
+            System.out.println("False");
+
     }
 }
