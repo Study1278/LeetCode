@@ -31,6 +31,9 @@ class Practice {
         if(!found){
             System.out.println("Not Found");
         }*/
+
+        //Leetcode 2 Duplicate No.
+        /*
         HashSet<Integer> nums = new HashSet<>();
         for ( int num :nums){
             if (nums.contains(num)) {
@@ -42,6 +45,15 @@ class Practice {
         }
         if(!found)
             System.out.println("False");
-
+*/
+        int MaxProfit=0;
+        int MinPrice=Integer.MAX_VALUE;
+        for (int price : arr){
+         if (price<MinPrice)
+            MinPrice=price;
+         else if (price - MinPrice >MaxProfit)
+             MaxProfit=price - MinPrice;
+        }
+System.out.println(MaxProfit);
     }
 }
