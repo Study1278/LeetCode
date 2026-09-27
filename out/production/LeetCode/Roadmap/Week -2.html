@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DSA Sem 3 — Week 2: Arrays Part 1</title>
+<style>
+:root{
+  --bg:#0f1115; --card:#171a21; --card-border:#262b36; --text:#e7e9ee; --muted:#9aa3b2;
+  --accent:#5fb3ff; --accent-soft:#1b2734; --green:#4ade80; --amber:#fbbf24; --red:#f87171;
+  --purple:#c084fc; --code-bg:#0d1117; --code-border:#30363d;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f7f8fa; --card:#ffffff; --card-border:#e3e6eb; --text:#1c2129; --muted:#5b6472;
+    --accent:#1d6fd8; --accent-soft:#e7f1fd; --code-bg:#f3f4f6; --code-border:#dfe3e8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  line-height:1.65;padding:calc(20px + env(safe-area-inset-top,0px)) 14px calc(60px + env(safe-area-inset-bottom,0px));}
+.wrap{max-width:840px;margin:0 auto}
+h1{font-size:1.5rem;margin:0 0 4px}
+.subtitle{color:var(--muted);margin:0 0 18px;font-size:0.93rem}
+.banner{background:var(--accent-soft);border:1px solid var(--accent);border-radius:12px;padding:14px 18px;margin-bottom:24px;font-size:0.92rem}
+.banner b{color:var(--accent)}
+.banner ol{margin:8px 0 0;padding-left:20px}
+.banner li{margin-bottom:4px}
+
+.concept-card{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.concept-card h2{margin:0 0 10px;font-size:1.12rem;color:var(--accent)}
+.concept-card p{margin:0;font-size:0.94rem}
+.video-link{display:inline-flex;align-items:center;gap:8px;background:var(--accent-soft);border:1px solid var(--accent);color:var(--accent);
+  text-decoration:none;padding:10px 16px;border-radius:10px;font-size:0.9rem;margin-top:14px;font-weight:600}
+.video-link:hover{filter:brightness(1.1)}
+.video-lang{font-size:0.78rem;color:var(--muted);margin-top:6px}
+
+.qs-card{background:#1a1420;border:1px solid #3c2a54;border-radius:12px;padding:14px 18px;margin-bottom:26px}
+.qs-card h3{margin:0 0 6px;font-size:0.98rem;color:var(--purple)}
+.qitem{margin-top:10px;font-size:0.9rem}
+.qitem b.qn{color:var(--text)}
+.qitem details{margin-top:4px}
+.qitem summary{cursor:pointer;color:var(--accent);font-size:0.84rem;font-weight:600;list-style:none}
+.qitem summary::-webkit-details-marker{display:none}
+.qitem summary::before{content:"▸ ";}
+.qitem details[open] summary::before{content:"▾ ";}
+.qans{font-size:0.87rem;margin-top:6px;padding:8px 12px;background:var(--accent-soft);border-radius:8px}
+
+.stage-tag{display:inline-block;font-size:0.72rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;
+  color:#0f1115;background:var(--accent);padding:3px 10px;border-radius:6px;margin-bottom:10px}
+.stage-tag.q{background:var(--purple)}
+.stage-tag.p{background:var(--green)}
+
+h2.section-title{font-size:1.25rem;margin:32px 0 4px;padding-top:18px;border-top:2px solid var(--card-border)}
+.section-sub{color:var(--muted);font-size:0.87rem;margin:0 0 14px}
+
+details.problem{background:var(--card);border:1px solid var(--card-border);border-radius:14px;margin-bottom:16px;overflow:hidden}
+details.problem summary{cursor:pointer;list-style:none;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+details.problem summary::-webkit-details-marker{display:none}
+details.problem summary::after{content:"▾";color:var(--muted);transition:transform 0.2s;margin-left:auto}
+details.problem[open] summary::after{transform:rotate(180deg)}
+.p-name{font-weight:700;font-size:1rem}
+.diff{font-size:0.72rem;padding:3px 10px;border-radius:999px;white-space:nowrap;font-weight:600}
+.diff.Easy{background:#132a1c;color:var(--green);border:1px solid #1f4a2f}
+.diff.Medium{background:#2a2313;color:var(--amber);border:1px solid #4a3c1f}
+.p-body{padding:0 18px 18px}
+.p-ask{background:var(--accent-soft);border-radius:8px;padding:10px 14px;font-size:0.9rem;margin-bottom:6px}
+.try-nudge{font-size:0.85rem;color:var(--muted);font-style:italic;margin:10px 0}
+.p-body h4{font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;margin:16px 0 6px}
+.p-body ol{margin:4px 0;padding-left:20px;font-size:0.92rem}
+.p-body ol li{margin-bottom:6px}
+pre{background:var(--code-bg);border:1px solid var(--code-border);border-radius:10px;padding:12px 14px;overflow-x:auto;font-size:0.82rem;margin:6px 0}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.cx{font-size:0.9rem;background:var(--accent-soft);display:inline-block;padding:8px 12px;border-radius:8px}
+.note{font-size:0.88rem;color:var(--muted);margin-top:10px;padding:10px 14px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0}
+.lc-link{color:var(--accent);text-decoration:none;font-size:0.85rem;display:inline-block;margin-top:10px;font-weight:600}
+.lc-link:hover{text-decoration:underline}
+
+.solution-toggle{margin-top:14px;border-top:1px dashed var(--card-border);padding-top:12px}
+.solution-toggle summary{cursor:pointer;color:var(--green);font-weight:700;font-size:0.92rem;list-style:none}
+.solution-toggle summary::-webkit-details-marker{display:none}
+.solution-toggle summary::before{content:"🔓 ";}
+
+.footer-note{color:var(--muted);font-size:0.85rem;margin-top:34px;padding-top:16px;border-top:1px solid var(--card-border)}
+.nav-links{display:flex;justify-content:space-between;margin-top:10px;font-size:0.85rem}
+.nav-links a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Semester 3 · Week 2</h1>
+<p class="subtitle">Arrays — Part 1 — Java DSA Roadmap</p>
+
+<div class="banner">
+<b>Same flow as Week 1, for every problem:</b>
+<ol>
+<li>Learn the underlying concept in detail, from scratch.</li>
+<li>Watch a free video on that exact concept.</li>
+<li>Answer 2 tiny clarification questions about the concept itself.</li>
+<li>Only then: read the LeetCode problem, try it yourself, reveal hints, then reveal the full solution.</li>
+</ol>
+</div>
+<h2 class="section-title">Foundation for this week</h2><p class="section-sub">The one big idea behind every array problem this week.</p>
+<div class="concept-card">
+<h2>📘 Arrays — how they actually sit in memory</h2>
+<p>An array is a block of <b>contiguous memory</b> — every element sits right next to the previous one, so
+  <code>arr[i]</code> is an O(1) jump straight to that memory slot (that's why arrays are so fast to read). The
+  trade-off: inserting or deleting in the middle means shifting everything after it, which is O(n). This week is about
+  getting comfortable moving things around inside an array in a single pass, without using extra arrays.</p>
+<a class="video-link" href="https://youtube.com/playlist?list=PL9gnSGHSqcnr_DxHsP7AW9ftq0AtAyYqJ" target="_blank" rel="noopener">▶ Watch: Kunal Kushwaha's full DSA-in-Java playlist (Arrays section)</a>
+<div class="video-lang">Language: English/Hinglish mix. This is the full free course playlist — find the "Arrays" videos near the start of the list.</div>
+</div>
+
+<div class="qs-card"><h3>✏️ Quick check on arrays basics</h3><div class="qitem"><b class="qn">If you swap arr[2] and arr[5] in an array, does the array's memory address change? (No — you're just swapping values at two existing slots, O(1) work.)</b></div>
+<div class="qitem"><b class="qn">Why is deleting the first element of an array O(n) but deleting the last element O(1)? (Deleting the first forces every other element to shift left by one; deleting the last touches nothing else.)</b></div></div>
+<h2 class="section-title">🧩 Now the problems — one concept-block per problem</h2>
+<div class="stage-tag">Concept</div>
+<div class="concept-card">
+<h2>📘 Concept needed: The Two-Pointer Technique</h2>
+<p>The <b>two-pointer technique</b> means using two index variables that move through an array (often at
+    different speeds or from different directions) instead of using nested loops. Here you use a "slow" pointer
+    (<code>insertPos</code>) that only moves when it finds a non-zero value, and a "fast" pointer (<code>i</code>)
+    that checks every element. The slow pointer always points to "the next empty slot for a non-zero number" — so by
+    the time the fast pointer finishes scanning, all non-zero numbers have been shifted to the front, in order, using
+    only one pass and no extra array.<br><br>
+    Why this matters: any time you'd normally think "shift elements over" or "compact an array", two pointers usually
+    turn an O(n²) shifting approach into a clean O(n) one-pass approach.</p>
+<a class="video-link" href="https://www.youtube.com/results?search_query=two+pointer+technique+java+explained+for+beginners" target="_blank" rel="noopener">▶ Watch: Two Pointer Technique — search for a Java-focused explainer</a>
+<div class="video-lang">Language: English — search link, several good short explainers exist; pick the one with the clearest animation for you.</div>
+</div>
+
+<div class="stage-tag q">Clarification questions</div>
+<div class="qs-card"><h3>✏️ Quick check — can you answer these before moving on?</h3>
+<div class="qitem">
+  <b class="qn">In the two-pointer idea for Move Zeroes, does the <code>insertPos</code> pointer ever move faster than <code>i</code>?</b>
+  <details><summary>Reveal answer</summary><div class="qans">No — insertPos always moves at the same speed or slower than i, since it only advances when a non-zero value is found. i always moves forward every iteration.</div></details>
+</div>
+<div class="qitem">
+  <b class="qn">Why don't we need a second array to solve this problem?</b>
+  <details><summary>Reveal answer</summary><div class="qans">Because insertPos always points to a position at or before i, so writing nums[insertPos] = nums[i] never overwrites a value we still need to read later.</div></details>
+</div></div>
+
+<div class="stage-tag p">LeetCode problem</div>
+<details class="problem">
+<summary>
+  <span class="p-name">Move Zeroes</span>
+  <span class="diff Easy">Easy</span>
+</summary>
+<div class="p-body">
+  <div class="p-ask"><b>Ask:</b> Move all zeroes in an array to the end, while keeping the relative order of the non-zero elements — do it in-place.</div>
+  <p class="try-nudge">Now that you understand The Two-Pointer Technique, try writing this yourself in Java before opening the hints below.</p>
+  <details>
+    <summary style="cursor:pointer;color:var(--amber);font-weight:600;font-size:0.9rem;">💡 Reveal approach — step by step (hints)</summary>
+    <h4 style="margin-top:12px;">Approach</h4>
+    <ol><li>Two-pointer idea: keep a pointer <code>insertPos</code> that tracks where the next non-zero number should go.</li>
+<li>Walk through the array once with pointer i. Whenever nums[i] != 0, place it at nums[insertPos] and increment insertPos.</li>
+<li>After the loop, insertPos marks where the zeroes should start — fill everything from insertPos to the end with 0.</li></ol>
+  </details>
+  <h4>Complexity</h4>
+  <div class="cx">Time O(n) — one pass. Space O(1) — in-place, no extra array.</div>
+  <details class="solution-toggle">
+    <summary>Reveal full Java solution</summary>
+    <pre><code>public void moveZeroes(int[] nums) {
+    int insertPos = 0;
+    for (int i = 0; i &lt; nums.length; i++) {
+        if (nums[i] != 0) {
+            nums[insertPos++] = nums[i];
+        }
+    }
+    while (insertPos &lt; nums.length) {
+        nums[insertPos++] = 0;
+    }
+}</code></pre>
+    
+  </details>
+  <a class="lc-link" href="https://leetcode.com/problems/move-zeroes/" target="_blank" rel="noopener">Open on LeetCode →</a>
+</div>
+</details>
+
+<div class="stage-tag">Concept</div>
+<div class="concept-card">
+<h2>📘 Concept needed: Boyer-Moore Voting Algorithm</h2>
+<p>Before this trick, the obvious approach is: count every number's frequency with a HashMap (you already
+    know this from Week 1), then find the one with count &gt; n/2. That works, but uses O(n) extra space.<br><br>
+    The <b>Boyer-Moore Voting Algorithm</b> does it in O(1) space using a clever "cancellation" idea: imagine every
+    occurrence of the majority element as a "+1 vote" and every other number as a "-1 vote" against whatever the
+    current candidate is. Keep a running <code>candidate</code> and a running <code>count</code>. If count drops to 0,
+    pick a new candidate (the current number). If the current number matches the candidate, count++; otherwise,
+    count--. Because the majority element appears more than half the time, it can never be fully "cancelled out" by
+    the other elements combined — it always survives as the final candidate.</p>
+<a class="video-link" href="https://www.youtube.com/results?search_query=boyer+moore+voting+algorithm+majority+element+explained" target="_blank" rel="noopener">▶ Watch: Boyer-Moore Voting Algorithm explained — search for a clear walkthrough</a>
+<div class="video-lang">Language: English — search link; look for one with a step-by-step trace on a small example array.</div>
+</div>
+
+<div class="stage-tag q">Clarification questions</div>
+<div class="qs-card"><h3>✏️ Quick check — can you answer these before moving on?</h3>
+<div class="qitem">
+  <b class="qn">If count reaches 0 partway through the array, what does the algorithm do next?</b>
+  <details><summary>Reveal answer</summary><div class="qans">It picks the current number as the new candidate and resets count to 1 (that current number counts as its own first vote).</div></details>
+</div>
+<div class="qitem">
+  <b class="qn">Why can't a non-majority element 'survive' as the final candidate?</b>
+  <details><summary>Reveal answer</summary><div class="qans">Because it appears in fewer than half the positions, so there aren't enough occurrences of it to out-vote the true majority element across the whole array — the cancellations always favor whichever number appears more than n/2 times.</div></details>
+</div></div>
+
+<div class="stage-tag p">LeetCode problem</div>
+<details class="problem">
+<summary>
+  <span class="p-name">Majority Element</span>
+  <span class="diff Easy">Easy</span>
+</summary>
+<div class="p-body">
+  <div class="p-ask"><b>Ask:</b> Find the element that appears more than n/2 times in the array (it's guaranteed to exist).</div>
+  <p class="try-nudge">Now that you understand Boyer-Moore Voting Algorithm, try writing this yourself in Java before opening the hints below.</p>
+  <details>
+    <summary style="cursor:pointer;color:var(--amber);font-weight:600;font-size:0.9rem;">💡 Reveal approach — step by step (hints)</summary>
+    <h4 style="margin-top:12px;">Approach</h4>
+    <ol><li>Simple approach: use a HashMap to count occurrences of every number, then scan the map for the one with count &gt; n/2. O(n) time, O(n) space.</li>
+<li>Smarter approach (Boyer-Moore Voting): keep a 'candidate' and a 'count'. If count is 0, pick the current number as candidate. If the current number matches candidate, count++; otherwise count--.</li>
+<li>Because the majority element appears more than half the time, it always survives this cancel-out process.</li></ol>
+  </details>
+  <h4>Complexity</h4>
+  <div class="cx">HashMap way: O(n) time, O(n) space. Boyer-Moore: O(n) time, O(1) space.</div>
+  <details class="solution-toggle">
+    <summary>Reveal full Java solution</summary>
+    <pre><code>public int majorityElement(int[] nums) {
+    int count = 0;
+    Integer candidate = null;
+    for (int num : nums) {
+        if (count == 0) candidate = num;
+        count += (num == candidate) ? 1 : -1;
+    }
+    return candidate;
+}</code></pre>
+    <div class="note">💡 Start with the HashMap version if Boyer-Moore feels confusing — get it working, then come back and learn the O(1)-space trick.</div>
+  </details>
+  <a class="lc-link" href="https://leetcode.com/problems/majority-element/" target="_blank" rel="noopener">Open on LeetCode →</a>
+</div>
+</details>
+
+<div class="stage-tag">Concept</div>
+<div class="concept-card">
+<h2>📘 Concept needed: Kadane's Algorithm</h2>
+<p>Kadane's Algorithm answers a simple question at every position in the array: <b>"should I extend the
+    subarray I was already building, or should I start a brand new subarray from here?"</b> You keep a running
+    <code>currentSum</code>. At each element, you compare: is <code>currentSum + nums[i]</code> better, or is
+    <code>nums[i]</code> alone (starting fresh) better? Whichever is bigger becomes the new currentSum. Separately,
+    you track <code>maxSum</code> as the best currentSum you've seen across the whole scan — because the best
+    subarray might have ended a few steps ago, not necessarily right at the end of the array.<br><br>
+    This "extend or restart, decided at every step" logic is a small taste of <b>dynamic programming</b> thinking —
+    you'll see this shape again a lot later in the roadmap.</p>
+<a class="video-link" href="https://www.youtube.com/results?search_query=Kadane%27s+Algorithm+NeetCode+Maximum+Subarray" target="_blank" rel="noopener">▶ Watch: Kadane's Algorithm — Maximum Subarray (NeetCode)</a>
+<div class="video-lang">Language: English — search link; NeetCode's walkthrough of this exact LeetCode problem is a great beginner-friendly pick if it appears in your results.</div>
+</div>
+
+<div class="stage-tag q">Clarification questions</div>
+<div class="qs-card"><h3>✏️ Quick check — can you answer these before moving on?</h3>
+<div class="qitem">
+  <b class="qn">If currentSum becomes negative at some point, is it ever worth carrying that negative sum into the next element?</b>
+  <details><summary>Reveal answer</summary><div class="qans">No — a negative currentSum can only drag down the next sum, so it's always at least as good to restart from the next element alone. That's exactly why we take Math.max(nums[i], currentSum + nums[i]).</div></details>
+</div>
+<div class="qitem">
+  <b class="qn">Why do we need a separate maxSum variable instead of just returning currentSum at the end?</b>
+  <details><summary>Reveal answer</summary><div class="qans">Because currentSum can shrink after passing the best subarray (e.g. if later numbers are very negative) — maxSum remembers the best value seen at any point, even if currentSum drops afterward.</div></details>
+</div></div>
+
+<div class="stage-tag p">LeetCode problem</div>
+<details class="problem">
+<summary>
+  <span class="p-name">Maximum Subarray (Kadane's Algorithm)</span>
+  <span class="diff Medium">Medium</span>
+</summary>
+<div class="p-body">
+  <div class="p-ask"><b>Ask:</b> Find the contiguous subarray with the largest sum.</div>
+  <p class="try-nudge">Now that you understand Kadane's Algorithm, try writing this yourself in Java before opening the hints below.</p>
+  <details>
+    <summary style="cursor:pointer;color:var(--amber);font-weight:600;font-size:0.9rem;">💡 Reveal approach — step by step (hints)</summary>
+    <h4 style="margin-top:12px;">Approach</h4>
+    <ol><li>Brute force: try every subarray → O(n&sup2;) or O(n&sup3;). Too slow.</li>
+<li>Kadane's idea: as you walk the array, keep a running sum 'currentSum'. At each element, decide: is it better to extend the previous subarray, or start fresh from this element?</li>
+<li>currentSum = Math.max(nums[i], currentSum + nums[i]) — if adding the previous sum would make things worse than starting over, restart.</li>
+<li>Track maxSum as the best currentSum you've seen so far.</li></ol>
+  </details>
+  <h4>Complexity</h4>
+  <div class="cx">Time O(n) — one pass. Space O(1).</div>
+  <details class="solution-toggle">
+    <summary>Reveal full Java solution</summary>
+    <pre><code>public int maxSubArray(int[] nums) {
+    int currentSum = nums[0];
+    int maxSum = nums[0];
+    for (int i = 1; i &lt; nums.length; i++) {
+        currentSum = Math.max(nums[i], currentSum + nums[i]);
+        maxSum = Math.max(maxSum, currentSum);
+    }
+    return maxSum;
+}</code></pre>
+    <div class="note">💡 This is a famous interview problem — Kadane's algorithm is worth truly internalizing, it's the seed of many DP problems later.</div>
+  </details>
+  <a class="lc-link" href="https://leetcode.com/problems/maximum-subarray/" target="_blank" rel="noopener">Open on LeetCode →</a>
+</div>
+</details>
+
+<div class="footer-note">
+Some concept videos link to a YouTube search results page rather than one exact video — this is intentional where an
+exact link couldn't be double-verified, so you never land on a broken/wrong page. For the full free Java DSA course
+in one place (English/Hinglish), search "Kunal Kushwaha DSA Java playlist" on YouTube.
+<div class="nav-links"><span>← Week 1: Big-O</span><span>Next: Week 3 — Arrays Part 2 + ArrayList/HashMap →</span></div>
+</div>
+
+</div>
+</body>
+</html>
