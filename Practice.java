@@ -1,59 +1,42 @@
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
+import javax.print.attribute.EnumSyntax;
 import java.util.Arrays;
+import java.util.Scanner;
 class Practice {
     public static void main(String[] args){
-        Scanner s= new Scanner (System.in);
-        System.out.print("Enter the No. of an Array : - ");
-        int n= s.nextInt();
-        int[] arr = new int[n];
-        boolean found=false;
-        HashMap<Integer,Integer> seen=new HashMap<>();
-        //Input An Array
-        for(int i=0;i<n;i++){
-            int input=s.nextInt();
-            arr[i]=input;
-            seen.put(arr[i],i);
-            }
-
-        System.out.println("Enter the Target");
-        int target=s.nextInt();
- /*       //finding process  (Two Sum)
-        for(int i=0;i<n;i++){
-            int need=target-arr[i];
-            if(seen.containsKey(need)){
-                System.out.println(Arrays.toString(new int[] {seen.get(need) ,i}));
-                found=true;
-                break;
-            }
+        Scanner sc=new Scanner(System.in);
+        System.out.print("Enter the no. of element :- ");
+        int n= sc.nextInt();
+        int[] nums=new int[n];
+        for (int i = 0; i < nums.length; i++) {
+            int element = sc.nextInt();
+            nums[i]=element;
         }
-        if(!found){
-            System.out.println("Not Found");
+        //Logic For Zeroes to END (BRUTE Method)
+        /*for (int i = 0; i < nums.length ; i++) {
+            if (nums[i] == 0) {
+                for (int j = i + 1; j < nums.length; j++) {
+                    if (nums[j] != 0) {
+                        int temp = nums[i];
+                        nums[i] = nums[j];
+                        nums[j] = temp;
+                        break;
+                    }
+                }
+            }
         }*/
-
-        //Leetcode 2 Duplicate No.
-        /*
-        HashSet<Integer> nums = new HashSet<>();
-        for ( int num :nums){
-            if (nums.contains(num)) {
-                System.out.println("True");
-                found=true;
-                break;
+        //Logic For Less Time Complexitity
+        int i=0, j=0;
+        for (i=0;i< nums.length;){
+            if (nums[i]!=0){
+                int temp=nums[i];
+                nums[i]=nums[j];
+                nums[j]=temp;
+                i++;
+                j++;
+            }else{
+                i++;
             }
-            nums.add(num);
         }
-        if(!found)
-            System.out.println("False");
-*/
-        int MaxProfit=0;
-        int MinPrice=Integer.MAX_VALUE;
-        for (int price : arr){
-         if (price<MinPrice)
-            MinPrice=price;
-         else if (price - MinPrice >MaxProfit)
-             MaxProfit=price - MinPrice;
-        }
-System.out.println(MaxProfit);
+            System.out.println(Arrays.toString(nums));
     }
 }
