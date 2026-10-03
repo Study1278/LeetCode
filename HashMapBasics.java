@@ -1,5 +1,5 @@
 import java.util.HashMap;
-class HaspMap {
+class HaspMapBasics {
 public static void main(String[] args) {
     HashMap<String,Integer> Emplid =new HashMap<>();
     Emplid.put("Vineet",12345);
